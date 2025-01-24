@@ -1,0 +1,55 @@
+directory_scanning_task:
+  description: >
+    Varre o diretório {directory} de um projeto UiPath, ignorando pastas {ignored_folders} e arquivos {ignored_files}, para identificar arquivos relevantes.
+    Foca na seleção de arquivos necessários para análise detalhada:
+    - Extensões: .xaml, .json, .xlsx.
+    - Localização: Framework, Workflows, Application ou similares.
+    - Seleciona arquivos que contenham informações de configuração, lógica e regras de negócio essenciais.
+  expected_output: >
+    - Lista de paths de arquivos relevantes (.xaml, .json, .xlsx).
+  agent: document_reader
+
+file_analysis_task:
+  description: >
+    Analisa todos os arquivos para extrair dados essenciais como:
+    - **Workflows (.xaml):**
+      - Lógica dos workflows.
+      - Entender os Detalhes de atividades  e configurações para retornar qual a função que o workflow faz.
+      - Regras de negócio aplicadas nas atividades ou documentadas.
+    - **Arquivos de configuração (config.json, config.xlsx):**
+      - Variáveis.
+      - Assets e credentials (nome e pasta).
+      - Detalhes das queues utilizadas.
+    - **Configurações do projeto (project.json):**
+      - Nome e descrição do projeto.
+      - Dependências e sua versão.
+      - Versão do UiPath Studio.
+  expected_output: >
+    - Objetivo geral do processo descrito nos workflows.
+    - Lógica detalhada de cada workflows separada, com base nas atividades identificadas.
+    - Informações extraídas dos arquivos de configuração:
+      - Assets (nome e pasta).
+      - Credentials (nome e pasta).
+      - Variáveis utilizadas no config que não são assets ou credentials.
+    - Dependências e configurações técnicas do projeto.
+  agent: document_reader
+
+documentation_writing_task:
+  description: >
+    Gera um relatório técnico SDD (Software Design Document) com base nas informações validadas e salva na pasta {DiretorioName} com o nome do projeto caso exista .docx.
+    Estrutura o documento com as seguintes seções:
+    - Objetivo geral da automação.
+    - Lógica detalhada de workflows e subfluxos, com base nas atividades analisadas.
+    - Informações dos arquivos de configuração:
+      - Assets (nome e pasta).
+      - Credentials (nome e pasta).
+      - Variáveis utilizadas.
+    - Dependências do projeto, incluindo pacotes e versão do UiPath Studio.
+  expected_output: >
+    - Documento SDD organizado e formatado profissionalmente.
+    - Seções:
+      - Objetivo geral.
+      - Lógica de workflows.
+      - Informações extraídas de arquivos de configuração nomes e folderes quando tiver de (assets, credentials, variáveis).
+      - Dependências do projeto.
+  agent: documentation_creator
